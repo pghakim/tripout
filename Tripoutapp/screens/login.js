@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import { globalStyles } from "../styles/global";
 
+const api = require("@what3words/api/es2015");
+api.setOptions({ key: "4583TEMW" });
+
 export default function Home({ navigation }) {
-  const pressHandler = () => {
+  const login = () => {
     navigation.navigate("Map");
+  };
+
+  const w3wConvert = () => {
+    api
+      .convertTo3wa({ lat: 51.520847, lng: -0.195521 })
+      .then((data) => console.log(data));
   };
 
   const [username, setUsername] = useState();
@@ -21,9 +30,9 @@ export default function Home({ navigation }) {
         secureTextEntry={true}
       />
 
-      <Button title="Login" onPress={pressHandler} />
+      <Button title="Login" onPress={login} />
       <View style={styles.space} />
-      <Button title="Sign Up" />
+      <Button title="Sign Up" onPress={w3wConvert} />
     </View>
   );
 }

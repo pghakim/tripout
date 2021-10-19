@@ -1,6 +1,6 @@
 import * as React from "react";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, AppRegistry } from "react-native";
 
 export default function App() {
   return (

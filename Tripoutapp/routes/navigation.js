@@ -7,7 +7,6 @@ const screens = {
   Home: {
     screen: Home,
   },
-
   Map: {
     screen: MapDisplay,
   },
