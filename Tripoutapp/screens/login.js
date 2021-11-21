@@ -1,58 +1,124 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput } from "react-native";
-import { globalStyles } from "../styles/global";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { useState, useEffect } from "react";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { auth } from "../firebase";
 
-const api = require("@what3words/api/es2015");
-api.setOptions({ key: "4583TEMW" });
+const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-export default function Home({ navigation }) {
-  const login = () => {
-    navigation.navigate("Map");
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.replace("Map");
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleSignUp = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Registered with:", user.email);
+      })
+      .catch((error) => alert(error.message));
   };
 
-  const w3wConvert = () => {
-    api
-      .convertTo3wa({ lat: 51.520847, lng: -0.195521 })
-      .then((data) => console.log(data));
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Logged in with :", user.email);
+      })
+      .catch((error) => alert(error.message));
   };
-
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.titleText}>Username:</Text>
-      <TextInput style={styles.input} placeholder="Username" />
-      <Text style={globalStyles.titleText}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-      />
-
-      <Button title="Login" onPress={login} />
-      <View style={styles.space} />
-      <Button title="Sign Up" onPress={w3wConvert} />
-    </View>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <View styles={styles.inputContainer}>
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          style={styles.input}
+          secureTextEntry
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleLogin} styles={styles.button}>
+          <Text style={styles.button}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleSignUp}
+          styles={[styles.button, styles.buttonOutline]}
+        >
+          <Text style={styles.button}>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
-}
+};
+
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
+  inputContainer: {},
   input: {
-    borderWidth: 1,
-    borderColor: "#777",
-    padding: 8,
-    margin: 10,
-    width: 200,
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginTop: 5,
   },
-  space: {
-    width: 20,
-    height: 20,
+  buttonContainer: {
+    width: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
+  button: {
+    backgroundColor: "#339cd4",
+    width: "100%",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+
+  buttonOutline: {
+    backgroundColor: "white",
+    marginTop: 5,
+    borderColor: "#339cd4",
+    borderWidth: 2,
+  },
+  buttonOutlineText: {
+    color: "#339cd4",
+    fontWeight: "700",
+    fontSize: 16,
   },
 });
