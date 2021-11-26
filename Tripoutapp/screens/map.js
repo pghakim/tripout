@@ -1,6 +1,6 @@
 import * as React from "react";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions, AppRegistry } from "react-native";
+import { StyleSheet, Text, View, Dimensions, AppRegistry, TouchableOpacity } from "react-native";
 
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
@@ -11,7 +11,23 @@ const w3wConvert = () => {
     .then((data) => console.log(data));
 };
 
-export default function App() {
+export default function App({navigation}) {
+  
+  const handlescreen = () =>{
+    console.log('friends list screen works');
+    navigation.navigate('FriendL')
+}
+
+const handlescreen3 = () =>{
+  console.log('friends Request screen works');
+  navigation.navigate('FriendR')
+}
+
+const handlescreen4 = () =>{
+  console.log('Inbox screen works')
+  navigation.navigate('Inbox')
+}
+  
   return (
     //w3w test to console
 
@@ -46,6 +62,27 @@ export default function App() {
           radius={1000}
         ></Circle>
       </MapView>
+      <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                onPress={handlescreen4}
+                styles={styles.button}
+                >
+                    <Text style={styles.button}>inbox</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={handlescreen3}
+                styles={[styles.button, styles.buttonOutline]}
+                >
+                    <Text style={styles.button}>Friends request</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={handlescreen}
+                styles={[styles.button, styles.buttonOutline]}
+                >
+                    <Text style={styles.button}>FriendList</Text>
+                </TouchableOpacity>
+                
+            </View>
     </View>
   );
 }
@@ -61,4 +98,36 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
+  buttonContainer:{
+    position:'absolute',
+    height: '90%',
+    width: '90%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    marginTop: -5,
+},
+button:{
+    backgroundColor: '#339cd4',
+    width: '100%',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'flex-start',
+},
+buttonText:{
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16,
+},
+
+buttonOutline:{
+    backgroundColor: 'white',
+    marginTop: 5,
+    borderColor: '#339cd4',
+    borderWidth: 2,
+},
+buttonOutlineText:{
+    color: '#339cd4',
+    fontWeight: '700',
+    fontSize: 16,
+}
 });

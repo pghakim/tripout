@@ -1,16 +1,23 @@
 // Import the functions you need from the SDKs you need
-import * as firebase from "firebase";
+import * as React from "react";
+import Navigator from "./routes/navigation";
+import "react-native-gesture-handler";
+import firebase from "firebase";
+import 'firebase/firestore'
+import { useState } from "react/cjs/react.development";
+import {StyleSheet, Text, TextInput, View } from 'react-native'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCRpRZLq-9BxKxzrAJQb-_dvMvj189K03A",
-  authDomain: "logintest-e14c5.firebaseapp.com",
-  projectId: "logintest-e14c5",
-  storageBucket: "logintest-e14c5.appspot.com",
-  messagingSenderId: "375442553947",
-  appId: "1:375442553947:web:9a106cbae989cb5f74937e",
+  apiKey: "AIzaSyB743tXPBR3V3DpyZdwah-D4FGdshwbNCE",
+  authDomain: "trip-out-58124.firebaseapp.com",
+  projectId: "trip-out-58124",
+  storageBucket: "trip-out-58124.appspot.com",
+  messagingSenderId: "724856084232",
+  appId: "1:724856084232:web:0d04cfff053135da59febd",
+  measurementId: "G-WNPGZB6BFE"
 };
 
 // Initialize Firebase
@@ -21,6 +28,8 @@ if (firebase.apps.length === 0) {
   app = firebase.app();
 }
 
+const db = firebase.firestore()
+
 const auth = firebase.auth();
 
-export { auth };
+export { auth, db };
