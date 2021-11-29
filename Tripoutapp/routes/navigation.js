@@ -5,7 +5,7 @@ import MapDisplay from "../screens/map";
 import FriendList from "../screens/FriendList";
 import FriendRequest from "../screens/FriendRequest";
 import Messages from "../screens/Messages";
-
+import PhotoDisplay from "../screens/photo";
 
 const screens = {
   Home: {
@@ -21,7 +21,10 @@ const screens = {
     screen: FriendRequest,
   },
   Inbox: {
-    screen: Messages
+    screen: Messages,
+  },
+  cameraScreen: {
+    screen: PhotoDisplay,
   },
 };
 
