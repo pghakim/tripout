@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Camera } from "expo-camera";
-import { useState } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
+import * as Location from "expo-location";
 
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
@@ -21,6 +22,38 @@ const w3wConvert = () => {
 };
 
 export default function App({ navigation }) {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  //let latitude;
+  //let longitude;
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({ accuracy: 2 }); // Location to the nearest km.
+      if (location.coords?.latitude && location.coords?.longitude) {
+        setLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+
+        latitude = location.coords?.latitude;
+        longitude = location.coords?.longitude;
+        console.log(latitude);
+        console.log(longitude);
+      }
+    })();
+  }, []);
+
+  console.log(latitude);
+  console.log(longitude);
+
   const takePhoto = () => {
     console.log("Take Photo button");
     navigation.navigate("cameraScreen");
@@ -42,39 +75,22 @@ export default function App({ navigation }) {
   };
 
   return (
-    //w3w test to console
-
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        provider={"google"}
         initialRegion={{
-          latitude: 42.318077482044075,
-          longitude: -83.2312023143651,
-          latitudeDelta: 0.0322,
-          longitudeDelta: 0.0221,
+          latitude: 5,
+          longitude: 5,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
         }}
-      >
-        <Marker
-          coordinate={{
-            latitude: 42.318077482044075,
-            longitude: -83.2312023143651,
-          }}
-          onPress={w3wConvert}
-          pinColor="green"
-        >
-          <Callout>
-            <Text>You have a message from Patrick waiting for you!</Text>
-          </Callout>
-        </Marker>
-
-        <Circle
-          center={{
-            latitude: 42.318077482044075,
-            longitude: -83.2312023143651,
-          }}
-          radius={1000}
-        ></Circle>
-      </MapView>
+        showsCompass={false}
+        rotateEnabled={false}
+        showsUserLocation={true}
+        followsUserLocation={true}
+        mapType={"hybrid"}
+      ></MapView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handlescreen4} styles={styles.button}>
           <Text style={styles.button}>inbox</Text>

@@ -196,8 +196,8 @@ export default function App({ navigation }) {
                     <TouchableOpacity
                       onPress={__takePicture}
                       style={{
-                        width: 70,
-                        height: 70,
+                        width: 75,
+                        height: 75,
                         bottom: 0,
                         borderRadius: 50,
                         backgroundColor: "#fff",
