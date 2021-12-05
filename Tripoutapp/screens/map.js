@@ -11,7 +11,7 @@ import {
 import { Camera } from "expo-camera";
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
-
+export const mapRef = React.createRef();
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
 
@@ -24,9 +24,6 @@ const w3wConvert = () => {
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-
-  //let latitude;
-  //let longitude;
 
   useEffect(() => {
     (async () => {
@@ -43,16 +40,20 @@ export default function App({ navigation }) {
           longitude: location.coords.longitude,
         });
 
-        latitude = location.coords?.latitude;
-        longitude = location.coords?.longitude;
-        console.log(latitude);
-        console.log(longitude);
+        var lat = location.coords?.latitude;
+        var long = location.coords?.longitude;
+        console.log(lat);
+        console.log(long);
+
+        mapRef.current.animateToRegion({
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
       }
     })();
   }, []);
-
-  console.log(latitude);
-  console.log(longitude);
 
   const takePhoto = () => {
     console.log("Take Photo button");
@@ -77,18 +78,20 @@ export default function App({ navigation }) {
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         style={styles.map}
         provider={"google"}
         initialRegion={{
-          latitude: 5,
-          longitude: 5,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: 44.3148,
+          longitude: -84.6024,
+          latitudeDelta: 6.0,
+          longitudeDelta: 6.0,
         }}
         showsCompass={false}
         rotateEnabled={false}
         showsUserLocation={true}
         followsUserLocation={true}
+        showsMyLocationButton={true}
         mapType={"hybrid"}
       ></MapView>
       <View style={styles.buttonContainer}>

@@ -61,17 +61,7 @@ export default function App({ navigation }) {
               alignItems: "center",
               height: 40,
             }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              Take picture
-            </Text>
-          </TouchableOpacity>
+          ></TouchableOpacity>
         </View>
       ) : (
         <View
