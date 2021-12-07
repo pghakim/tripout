@@ -21,6 +21,15 @@ const w3wConvert = () => {
     .then((data) => console.log(data));
 };
 
+const signOut = () =>{
+  firebase.auth().signOut()
+  .then(function (user){
+    alert('You Have Successfully Logged Out')
+    navigation.replace("Home")
+})
+.catch(error => alert(error.message))
+};
+
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -116,6 +125,13 @@ export default function App({ navigation }) {
         >
           <Text style={styles.button}>Take Photo</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+                onPress={signOut}
+                styles={[styles.button, styles.buttonOutline]}
+                >
+                  <Text styles={styles.button}>Signout</Text>
+                </TouchableOpacity>
+
       </View>
     </View>
   );
