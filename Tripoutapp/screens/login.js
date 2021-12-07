@@ -63,7 +63,7 @@ function LoginScreen ({navigation}) {
 
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        //<KeyboardAvoidingView style={styles.container} behavior="padding">
             <View styles={styles.inputContainer}>
                 <TextInput 
                 placeholder='Email'
@@ -79,7 +79,6 @@ function LoginScreen ({navigation}) {
                 secureTextEntry
                 />
 
-            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity 
                 onPress={handleLogin}
@@ -99,9 +98,8 @@ function LoginScreen ({navigation}) {
                 >
                     <Text>Forgot Password?</Text>    
                 </TouchableOpacity>
-            
             </View>
-        </KeyboardAvoidingView>
+            </View>
     );
 };
 

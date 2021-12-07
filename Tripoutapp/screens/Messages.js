@@ -49,11 +49,10 @@ import 'firebase/firestore'
     const handleaccept = () => {
         if (from == "")
         {
-            console.log("please tap a name before you select")
+            alert("please tap a name before you select")
         }
         else{
-        alert("you pressed the accept button");
-        console.log("you have accepted ", from, "as your new friend")
+        alert("you have accepted the request")
         db.collection("Friends").doc(from).update({
             friends: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
         })
@@ -80,11 +79,10 @@ import 'firebase/firestore'
     const handledeny = () => {
         if (from == "")
         {
-            console.log("please tap a name before you select")
+            alert("please tap a name before you select")
         }
         else{
-        alert("you pressed the deny friend request button")
-        console.log("you have denied ", from, " request")
+        alert("you have denied the request")
         db.collection("Requests").doc(auth.currentUser.email).update({
             request: firebase.firestore.FieldValue.arrayRemove(from)
         })

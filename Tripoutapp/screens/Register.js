@@ -47,7 +47,6 @@ function RegisterScreen ({navigation}) {
         .catch(error => alert(error.message))
     };
     return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View styles={styles.inputContainer}>
             <TextInput
             placeholder= 'User Name'
@@ -78,9 +77,8 @@ function RegisterScreen ({navigation}) {
             </View>
 
         </View>
-        <View style={styles.buttonContainer}>
-     </View>
-    </KeyboardAvoidingView>
+        //<View style={styles.buttonContainer}>
+     //</View>
 );
 };
 
