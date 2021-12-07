@@ -35,6 +35,7 @@ export default function App({ navigation }) {
     setCapturedImage(photo);
   };
   const __savePhoto = async () => {};
+  
   return (
     <View
       style={{
