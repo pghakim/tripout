@@ -6,7 +6,8 @@ import FriendList from "../screens/FriendList";
 import FriendRequest from "../screens/FriendRequest";
 import Messages from "../screens/Messages";
 import PhotoDisplay from "../screens/photo";
-
+import forgotPassword from "../screens/forgotPassword";
+import Register from "../screens/Register";
 const screens = {
   Home: {
     screen: Home,
@@ -34,6 +35,12 @@ const screens = {
   },
   Inbox: {
     screen: Messages,
+  },
+  ForgotPassword: {
+    screen: forgotPassword
+  },
+  Register: {
+    screen: Register
   },
   cameraScreen: {
     screen: PhotoDisplay,

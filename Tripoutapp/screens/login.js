@@ -21,7 +21,7 @@ function LoginScreen ({navigation}) {
         return unsubscribe
     }, []);
 
-    const handleSignUp = () =>{
+    /*const handleSignUp = () =>{
         auth
         .createUserWithEmailAndPassword(email, password)
         .then(userCredentials =>{
@@ -36,9 +36,10 @@ function LoginScreen ({navigation}) {
             .catch((error) => {
                 console.error("Error adding document: ", error);
             });
+            navigation.replace("Map")
         })
         .catch(error => alert(error.message))
-    };
+    };*/
 
     const handleLogin = () =>{
         auth
@@ -51,7 +52,14 @@ function LoginScreen ({navigation}) {
         
     .catch(error => alert(error.message))
     };
+
+    const handleForgotPassword = () =>{
+        navigation.navigate("ForgotPassword")
+    }
         
+    const userRegistration = () => {
+        navigation.navigate("Register")
+    }
 
 
     return (
@@ -80,11 +88,18 @@ function LoginScreen ({navigation}) {
                     <Text style={styles.button}>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                onPress={handleSignUp}
+                onPress={userRegistration}
                 styles={[styles.button, styles.buttonOutline]}
                 >
                     <Text style={styles.button}>Register</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                onPress={handleForgotPassword}
+                styles= {styles.button}
+                >
+                    <Text>Forgot Password?</Text>    
+                </TouchableOpacity>
+            
             </View>
         </KeyboardAvoidingView>
     );
