@@ -13,6 +13,7 @@ export default function FriendRequest({ navigation }) {
     const [user, setUsers] = useState([]);
     const [email1, setEmail] = useState("");
 
+
     //code to handle navigation to the map screen
     const pressHandler = () => {
       navigation.navigate("Map");
