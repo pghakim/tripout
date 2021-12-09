@@ -13,6 +13,7 @@ export default function FriendRequest({ navigation }) {
     const [user, setUsers] = useState([]);
     const [email1, setEmail] = useState("");
 
+
     //code to handle navigation to the map screen
     const pressHandler = () => {
       navigation.navigate("Map");
@@ -32,7 +33,7 @@ export default function FriendRequest({ navigation }) {
                 console.log(user)
                 if (user.includes(email1))
                 {
-                    console.log("you already have that email in your friend list")
+                    alert("you already have that email in your friend list")
                 }
                 else{
                     db.collection("users").where("email", "==", email1)
@@ -44,7 +45,6 @@ export default function FriendRequest({ navigation }) {
                         }
                         else{
                         querySnapshot.forEach((doc) => {
-                            setcu(querySnapshot.size)
                             db.collection("Requests").doc(email1).update({
                                 request: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
                             })
@@ -65,7 +65,7 @@ export default function FriendRequest({ navigation }) {
         <View style={globalStyles.container}>
         <Text style={globalStyles.titleText}>Email:</Text>
         <TextInput style={styles.input} 
-        placeholder="please insert a user email in all lowercase" 
+        placeholder="please insert email in all lowercase" 
         value={email1}
         onChangeText={(text) => setEmail(text)}
         />
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         borderColor: "#777",
         padding: 8,
         margin: 10,
-        width: 200,
+        width: 300,
     },
     space2: {
         width: 10,

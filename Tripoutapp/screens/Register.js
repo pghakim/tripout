@@ -24,8 +24,8 @@ function RegisterScreen ({navigation}) {
                 email: user.email,
                 username: displayName,
                 })
-                .then((userName) => {
-                    console.log("Document written with ID: ", userName);
+                .then((username) => {
+                    console.log("Document written with ID: ", username);
                 })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -33,8 +33,8 @@ function RegisterScreen ({navigation}) {
                 db.collection("Friends").doc(user.email).set({
                     friends: f
                 })
-                .then((userName) => {
-                    console.log("Document written with ID: ", userName);
+                .then((username) => {
+                    console.log("Document written with ID: ", user.email);
                 })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -42,12 +42,21 @@ function RegisterScreen ({navigation}) {
                 db.collection("Requests").doc(user.email).set({
                     request: f
                 })
+                .then((username) => {
+                    console.log("Document written with ID: ", user.email);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+                db.collection("Images").doc(user.email).set({
+                 url: f   
+                })
+                
             navigation.replace("Map")
         })
         .catch(error => alert(error.message))
     };
     return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View styles={styles.inputContainer}>
             <TextInput
             placeholder= 'User Name'
@@ -78,9 +87,8 @@ function RegisterScreen ({navigation}) {
             </View>
 
         </View>
-        <View style={styles.buttonContainer}>
-     </View>
-    </KeyboardAvoidingView>
+        //<View style={styles.buttonContainer}>
+     //</View>
 );
 };
 
