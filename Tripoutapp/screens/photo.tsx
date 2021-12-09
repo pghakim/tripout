@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -8,14 +7,17 @@ import {
   ImageBackground,
 } from "react-native";
 import { Camera } from "expo-camera";
-import navigation from "../routes/navigation";
+import { storage } from '../firebase';
+import uuid from 'uuid';
+
 const tag = "[CAMERA]";
 export default function App({ navigation }) {
   const [hasPermission, setHasPermission] = useState<any>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
   const [startOver, setStartOver] = useState(true);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [image, setImage] = useState(null);
+
   let camera: Camera;
   useEffect(() => {
     (async () => {
@@ -27,22 +29,56 @@ export default function App({ navigation }) {
   const __closeCamera = () => {
     navigation.navigate("Map");
   };
+
   const __takePicture = async () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync();
     console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
+    setImage(photo.uri)
   };
-  const __savePhoto = async () => {};
+
+  const getPictureBlob = (uri) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', image, true);
+      xhr.send(null);
+    });
+  };
+
+  const uploadImageToBucket = async () => {
+    let blob;
+    try {
+      blob = await getPictureBlob(image);
   
+      const ref = await storage.ref().child(uuid.v4());
+      const snapshot = await ref.put(blob);
+  
+      return await snapshot.ref.getDownloadURL();
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      blob.close();
+      navigation.replace('Map')
+    }
+  };
+ 
   return (
     <View
       style={{
         flex: 1,
       }}
     >
-      {startOver ? (
+      {startOver ? ( 
         <View
           style={{
             flex: 1,
@@ -111,7 +147,7 @@ export default function App({ navigation }) {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={__savePhoto}
+                    onPress={uploadImageToBucket}
                     style={{
                       width: 130,
                       height: 40,
@@ -135,7 +171,7 @@ export default function App({ navigation }) {
           ) : (
             <Camera
               style={{ flex: 1 }}
-              type={type}
+
               ref={(r) => {
                 camera = r;
               }}
@@ -213,3 +249,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+

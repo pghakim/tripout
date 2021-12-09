@@ -8,10 +8,9 @@ import {
   AppRegistry,
   TouchableOpacity,
 } from "react-native";
-import { Camera } from "expo-camera";
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 export const mapRef = React.createRef();
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });

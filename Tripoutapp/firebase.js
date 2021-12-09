@@ -14,7 +14,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyB743tXPBR3V3DpyZdwah-D4FGdshwbNCE",
   authDomain: "trip-out-58124.firebaseapp.com",
   projectId: "trip-out-58124",
-  storageBucket: "trip-out-58124.appspot.com",
+  storageBucket: "gs://trip-out-58124.appspot.com",
   messagingSenderId: "724856084232",
   appId: "1:724856084232:web:0d04cfff053135da59febd",
   measurementId: "G-WNPGZB6BFE"
@@ -31,5 +31,5 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore()
 
 const auth = firebase.auth();
-
-export { auth, db };
+const storage = firebase.storage();
+export { auth, db, storage};
