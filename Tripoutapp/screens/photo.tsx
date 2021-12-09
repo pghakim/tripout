@@ -7,8 +7,12 @@ import {
   ImageBackground,
 } from "react-native";
 import { Camera } from "expo-camera";
-import { storage } from '../firebase';
+import { auth, db, storage } from '../firebase';
 import uuid from 'uuid';
+import firebase from "firebase";
+import firestore from "firebase/firestore"
+import 'firebase/firestore'
+import {latc, longc} from "../screens/map";
 
 const tag = "[CAMERA]";
 export default function App({ navigation }) {
@@ -56,14 +60,18 @@ export default function App({ navigation }) {
   };
 
   const uploadImageToBucket = async () => {
+    db.collection("Images").doc(auth.currentUser.email).update({
+      url: firebase.firestore.FieldValue.arrayUnion(image)
+    })
     let blob;
     try {
       blob = await getPictureBlob(image);
   
       const ref = await storage.ref().child(uuid.v4());
       const snapshot = await ref.put(blob);
-  
+
       return await snapshot.ref.getDownloadURL();
+      
     } catch (e) {
       alert(e.message);
     } finally {
