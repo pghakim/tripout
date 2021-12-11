@@ -49,7 +49,7 @@ function RegisterScreen ({navigation}) {
                     console.error("Error adding document: ", error);
                 });
                 db.collection("Images").doc(user.email).set({
-                 url: f,   
+                 URI: f,   
                  Latitude: f,
                  Longitude: f
                 })

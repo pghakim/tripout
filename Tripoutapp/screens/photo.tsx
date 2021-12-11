@@ -61,7 +61,9 @@ export default function App({ navigation }) {
 
   const uploadImageToBucket = async () => {
     db.collection("Images").doc(auth.currentUser.email).update({
-      url: firebase.firestore.FieldValue.arrayUnion(image)
+      URI: firebase.firestore.FieldValue.arrayUnion(image),
+      Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
+      Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
     })
     let blob;
     try {
