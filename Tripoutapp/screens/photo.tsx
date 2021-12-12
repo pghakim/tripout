@@ -12,15 +12,19 @@ import uuid from 'uuid';
 import firebase from "firebase";
 import firestore from "firebase/firestore"
 import 'firebase/firestore'
-//import {latc, longc} from "../screens/map";
+import * as Location from "expo-location";
 
 const tag = "[CAMERA]";
+
 export default function App({ navigation }) {
   const [hasPermission, setHasPermission] = useState<any>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
   const [startOver, setStartOver] = useState(true);
   const [image, setImage] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [latc, setLatC] = useState(0);
+  const [longc, setLongC] = useState(0)
 
   let camera: Camera;
   useEffect(() => {
@@ -28,6 +32,20 @@ export default function App({ navigation }) {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === "granted");
       setStartOver(false);
+      const location = await Location.getCurrentPositionAsync({ accuracy: 2 }); // Location to the nearest km.
+      if (location.coords?.latitude && location.coords?.longitude) {
+        setLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+
+        var lat = location.coords?.latitude;
+        var long = location.coords?.longitude;
+        setLatC(lat)
+        setLongC(long)
+      }
+      console.log(latc)
+      console.log(longc)
     })();
   }, []);
   const __closeCamera = () => {
@@ -62,8 +80,8 @@ export default function App({ navigation }) {
   const uploadImageToBucket = async () => {
     db.collection("Images").doc(auth.currentUser.email).update({
       uri: firebase.firestore.FieldValue.arrayUnion(image),
-      //Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
-      //Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
+      Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
+      Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
     })
     let blob;
     try {
