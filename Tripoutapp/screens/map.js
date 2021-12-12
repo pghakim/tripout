@@ -8,12 +8,13 @@ import {
   AppRegistry,
   TouchableOpacity,
 } from "react-native";
-import { Camera } from "expo-camera";
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
+import { db, auth } from "../firebase";
 export const mapRef = React.createRef();
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
+
 
 const w3wConvert = () => {
   api
@@ -21,22 +22,46 @@ const w3wConvert = () => {
     .then((data) => console.log(data));
 };
 
-const signOut = () =>{
-  firebase.auth().signOut()
-  .then(function (user){
-    alert('You Have Successfully Logged Out')
-    navigation.replace("Home")
-})
-.catch(error => alert(error.message))
-};
 
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [latc, setLatC] = useState(0);
+  const [longc, setLongC] = useState(0);
+  const [userF, setUserF] = useState([]);
+  const [userI, setUserI] = useState([]);
+
+const signOut = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(function (user) {
+      alert("You Have Successfully Logged Out");
+      navigation.replace("Home");
+    })
+    .catch((error) => alert(error.message));
+};
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      
+      /*db
+        .collection("Friends")
+        .doc(auth.currentUser.email).get()
+        .then((doc) => {
+          setUserF(doc.data().friends)
+          console.log(doc.data().friends)
+          doc.data().friends.forEach(Element => {
+            db.collection("Images").doc(Element).get().then((doc) => {
+              console.log(Element)
+              setUserI(doc.data().url)
+              console.log(userI)
+              console.log(doc.data().url)
+            })
+          })
+        })*/
+
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
@@ -51,9 +76,6 @@ export default function App({ navigation }) {
 
         var lat = location.coords?.latitude;
         var long = location.coords?.longitude;
-        console.log(lat);
-        console.log(long);
-
         mapRef.current.animateToRegion({
           latitude: lat,
           longitude: long,
@@ -126,17 +148,16 @@ export default function App({ navigation }) {
           <Text style={styles.button}>Take Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity
-                onPress={signOut}
-                styles={[styles.button, styles.buttonOutline]}
-                >
-                  <Text styles={styles.button}>Signout</Text>
-                </TouchableOpacity>
-
+          onPress={signOut} 
+          styles={[styles.button]}
+        >
+          <Text styles={styles.buttonText}>Signout</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
-
+//export {latc, longc};
 const styles = StyleSheet.create({
   container: {
     flex: 1,

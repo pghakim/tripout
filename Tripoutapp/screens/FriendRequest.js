@@ -44,7 +44,6 @@ export default function FriendRequest({ navigation }) {
                         }
                         else{
                         querySnapshot.forEach((doc) => {
-                            setcu(querySnapshot.size)
                             db.collection("Requests").doc(email1).update({
                                 request: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
                             })
@@ -65,7 +64,7 @@ export default function FriendRequest({ navigation }) {
         <View style={globalStyles.container}>
         <Text style={globalStyles.titleText}>Email:</Text>
         <TextInput style={styles.input} 
-        placeholder="please insert a user email in all lowercase" 
+        placeholder="please insert email in all lowercase" 
         value={email1}
         onChangeText={(text) => setEmail(text)}
         />
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
         borderColor: "#777",
         padding: 8,
         margin: 10,
-        width: 200,
+        width: 300,
     },
     space2: {
         width: 10,

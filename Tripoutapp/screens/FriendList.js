@@ -48,10 +48,10 @@ function FriendList({ navigation }) {
     const handledeletion = () =>{
         if(fName == "")
         {
-            console.log("please press a name before you delete a friend")
+            alert("please press a name before you delete a friend")
         }
         else {
-        console.log("you have deleted ", fName, " from your friend list")
+        alert("you have deleted the user")
         db.collection("Friends").doc(auth.currentUser.email).update({
             friends: firebase.firestore.FieldValue.arrayRemove(fName)
         })
