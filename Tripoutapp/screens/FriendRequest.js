@@ -13,6 +13,7 @@ export default function FriendRequest({ navigation }) {
     const [user, setUsers] = useState([]);
     const [email1, setEmail] = useState("");
 
+
     //code to handle navigation to the map screen
     const pressHandler = () => {
       navigation.navigate("Map");
@@ -32,7 +33,7 @@ export default function FriendRequest({ navigation }) {
                 console.log(user)
                 if (user.includes(email1))
                 {
-                    console.log("you already have that email in your friend list")
+                    alert("you already have that email in your friend list")
                 }
                 else{
                     db.collection("users").where("email", "==", email1)
