@@ -6,22 +6,22 @@ import {
   View,
   Dimensions,
   AppRegistry,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import { db, auth } from "../firebase";
 export const mapRef = React.createRef();
+import firebase from "firebase";
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
-
 
 const w3wConvert = () => {
   api
     .convertTo3wa({ lat: 51.520847, lng: -0.195521 })
     .then((data) => console.log(data));
 };
-
 
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
@@ -30,37 +30,48 @@ export default function App({ navigation }) {
   const [longc, setLongC] = useState(0);
   const [userF, setUserF] = useState([]);
   const [userI, setUserI] = useState([]);
+  const [friendsImage] = useState([
+    {
+      username: "bob",
+      description: "school friend",
+      longitude: 77.3,
+      latitude: 32.5,
+    },
+  ]);
 
-const signOut = () => {
-  firebase
-    .auth()
-    .signOut()
-    .then(function (user) {
-      alert("You Have Successfully Logged Out");
-      navigation.replace("Home");
-    })
-    .catch((error) => alert(error.message));
-};
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function (user) {
+        alert("You Have Successfully Logged Out");
+        navigation.replace("Home");
+      })
+      .catch((error) => alert(error.message));
+  };
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      
-      /*db
-        .collection("Friends")
-        .doc(auth.currentUser.email).get()
+
+      db.collection("Friends")
+        .doc(auth.currentUser.email)
+        .get()
         .then((doc) => {
-          setUserF(doc.data().friends)
-          console.log(doc.data().friends)
-          doc.data().friends.forEach(Element => {
-            db.collection("Images").doc(Element).get().then((doc) => {
-              console.log(Element)
-              setUserI(doc.data().url)
-              console.log(userI)
-              console.log(doc.data().url)
-            })
-          })
-        })*/
+          setUserF(doc.data().friends);
+          console.log(doc.data().friends);
+          doc.data().friends.forEach((Element) => {
+            db.collection("Images")
+              .doc(Element)
+              .get()
+              .then((doc) => {
+                console.log(Element);
+                setUserI(doc.data().uri);
+                console.log(userI);
+                console.log(doc.data().uri);
+              });
+          });
+        });
 
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
@@ -76,6 +87,7 @@ const signOut = () => {
 
         var lat = location.coords?.latitude;
         var long = location.coords?.longitude;
+
         mapRef.current.animateToRegion({
           latitude: lat,
           longitude: long,
@@ -106,6 +118,12 @@ const signOut = () => {
     navigation.navigate("Inbox");
   };
 
+  const showimageontap = () => {
+    render;
+  };
+
+  const DisplayAnImage = () => {};
+
   return (
     <View style={styles.container}>
       <MapView
@@ -124,7 +142,29 @@ const signOut = () => {
         followsUserLocation={true}
         showsMyLocationButton={true}
         mapType={"hybrid"}
-      ></MapView>
+      >
+        <Marker
+          onPress={DisplayAnImage}
+          coordinate={{
+            latitude: 44.3148,
+            longitude: -84.6024,
+          }}
+        />
+
+        {friendsImage
+          ? friendsImage.map((friend) => (
+              <Marker
+                coordinate={{
+                  latitude: friend.latitude,
+                  longitude: friend.longitude,
+                }}
+                title={friend.username}
+                description={friend.description}
+              ></Marker>
+            ))
+          : null}
+      </MapView>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handlescreen4} styles={styles.button}>
           <Text style={styles.button}>inbox</Text>
@@ -147,10 +187,7 @@ const signOut = () => {
         >
           <Text style={styles.button}>Take Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={signOut} 
-          styles={[styles.button]}
-        >
+        <TouchableOpacity onPress={signOut} styles={[styles.button]}>
           <Text styles={styles.buttonText}>Signout</Text>
         </TouchableOpacity>
       </View>

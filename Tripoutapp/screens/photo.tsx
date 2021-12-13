@@ -7,11 +7,11 @@ import {
   ImageBackground,
 } from "react-native";
 import { Camera } from "expo-camera";
-import { auth, db, storage } from '../firebase';
-import uuid from 'uuid';
+import { auth, db, storage } from "../firebase";
+import uuid from "uuid";
 import firebase from "firebase";
-import firestore from "firebase/firestore"
-import 'firebase/firestore'
+import firestore from "firebase/firestore";
+import "firebase/firestore";
 import * as Location from "expo-location";
 
 const tag = "[CAMERA]";
@@ -24,7 +24,7 @@ export default function App({ navigation }) {
   const [image, setImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [latc, setLatC] = useState(0);
-  const [longc, setLongC] = useState(0)
+  const [longc, setLongC] = useState(0);
 
   let camera: Camera;
   useEffect(() => {
@@ -41,11 +41,11 @@ export default function App({ navigation }) {
 
         var lat = location.coords?.latitude;
         var long = location.coords?.longitude;
-        setLatC(lat)
-        setLongC(long)
+        setLatC(lat);
+        setLongC(long);
+        console.log(lat);
+        console.log(long);
       }
-      console.log(latc)
-      console.log(longc)
     })();
   }, []);
   const __closeCamera = () => {
@@ -58,7 +58,7 @@ export default function App({ navigation }) {
     console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
-    setImage(photo.uri)
+    setImage(photo.uri);
   };
 
   const getPictureBlob = (uri) => {
@@ -69,44 +69,45 @@ export default function App({ navigation }) {
       };
       xhr.onerror = function (e) {
         console.log(e);
-        reject(new TypeError('Network request failed'));
+        reject(new TypeError("Network request failed"));
       };
-      xhr.responseType = 'blob';
-      xhr.open('GET', image, true);
+      xhr.responseType = "blob";
+      xhr.open("GET", image, true);
       xhr.send(null);
     });
   };
 
   const uploadImageToBucket = async () => {
-    db.collection("Images").doc(auth.currentUser.email).update({
-      uri: firebase.firestore.FieldValue.arrayUnion(image),
-      Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
-      Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
-    })
+    db.collection("Images")
+      .doc(auth.currentUser.email)
+      .update({
+        uri: firebase.firestore.FieldValue.arrayUnion(image),
+        Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
+        Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
+      });
     let blob;
     try {
       blob = await getPictureBlob(image);
-  
+
       const ref = await storage.ref().child(uuid.v4());
       const snapshot = await ref.put(blob);
 
       return await snapshot.ref.getDownloadURL();
-      
     } catch (e) {
       alert(e.message);
     } finally {
       blob.close();
-      navigation.replace('Map')
+      navigation.replace("Map");
     }
   };
- 
+
   return (
     <View
       style={{
         flex: 1,
       }}
     >
-      {startOver ? ( 
+      {startOver ? (
         <View
           style={{
             flex: 1,
@@ -199,7 +200,6 @@ export default function App({ navigation }) {
           ) : (
             <Camera
               style={{ flex: 1 }}
-
               ref={(r) => {
                 camera = r;
               }}
@@ -277,6 +277,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-
-
