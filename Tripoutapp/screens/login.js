@@ -41,6 +41,7 @@ function LoginScreen ({navigation}) {
         .catch(error => alert(error.message))
     };*/
 
+    //Function to contact firebase auth and confirm a registered user
     const handleLogin = () =>{
         auth
         .signInWithEmailAndPassword(email, password)
@@ -53,10 +54,12 @@ function LoginScreen ({navigation}) {
     .catch(error => alert(error.message))
     };
 
+    //Redirectes user to the Forgot Password Page
     const handleForgotPassword = () =>{
         navigation.navigate("ForgotPassword")
     }
-        
+    
+    //Redirects user to the Registration page
     const userRegistration = () => {
         navigation.navigate("Register")
     }

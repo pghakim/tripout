@@ -5,6 +5,7 @@ import {useState} from 'react'
 import {auth, db} from '../firebase'
 import firebase from "firebase";
 
+//Contacts firebase to send an email with a link to reset password
 function forgotPassword({navigation}){
     const [email, setEmail] = useState('')
 

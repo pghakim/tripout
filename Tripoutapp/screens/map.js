@@ -26,18 +26,21 @@ const w3wConvert = () => {
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [latc, setLatC] = useState(0);
-  const [longc, setLongC] = useState(0);
+
+  //contains the current user friendlist names
   const [userF, setUserF] = useState([]);
+
+  //contains the uri of the imagees the user friends took
   const [userI, setUserI] = useState([]);
-  const [friendsImage] = useState([
-    {
-      username: "bob",
-      description: "school friend",
-      longitude: 77.3,
-      latitude: 32.5,
-    },
-  ]);
+
+  //contains the latitude of each image the user friends took
+  const [latc, setLatC] = useState([]);
+
+  //contains the longtitude of each image the user friends took
+  const [longc, setLongC] = useState([]);
+
+  const [cN, setCN] = useState(0);
+  const [friendsImage] = useState([ ]);
 
   const signOut = () => {
     firebase
@@ -66,9 +69,14 @@ export default function App({ navigation }) {
               .get()
               .then((doc) => {
                 console.log(Element);
+                setCN(doc.data().uri.size);
                 setUserI(doc.data().uri);
+                setLatC(doc.data().Latitude);
+                setLongC(doc.data().Longitude);
                 console.log(userI);
                 console.log(doc.data().uri);
+                console.log(doc.data().Latitude);
+                console.log(doc.data().Longitude);
               });
           });
         });
@@ -100,12 +108,50 @@ export default function App({ navigation }) {
 
   const takePhoto = () => {
     console.log("Take Photo button");
+
     navigation.navigate("cameraScreen");
   };
 
   const handlescreen = () => {
     console.log("friends list screen works");
     navigation.navigate("FriendL");
+  };
+  const handlemarkers = () => {
+    console.log(userI.length);
+    db.collection("Friends")
+    .doc(auth.currentUser.email)
+    .get()
+    .then((doc) => {
+      setUserF(doc.data().friends);
+      console.log(doc.data().friends);
+      doc.data().friends.forEach((Element) => {
+        db.collection("Images")
+          .doc(Element)
+          .get()
+          .then((doc) => {
+            friendsImage.push({
+              username: Element,
+              description: "Friend",
+              uri: doc.data().uri[0],
+              latitude: doc.data().Latitude[0],
+              longitude: doc.data().Longitude[0],
+            })
+            /*console.log(Element);
+            setCN(doc.data().uri.size);
+            setUserI(doc.data().uri);
+            setLatC(doc.data().Latitude);
+            setLongC(doc.data().Longitude);
+            console.log(userI);
+            console.log(doc.data().uri);
+            console.log(doc.data().Latitude);
+            console.log(doc.data().Longitude)*/
+          });
+      });
+    });
+
+    
+
+    console.log(friendsImage);
   };
 
   const handlescreen3 = () => {
@@ -116,10 +162,6 @@ export default function App({ navigation }) {
   const handlescreen4 = () => {
     console.log("Inbox screen works");
     navigation.navigate("Inbox");
-  };
-
-  const showimageontap = () => {
-    render;
   };
 
   const DisplayAnImage = () => {};
@@ -143,26 +185,21 @@ export default function App({ navigation }) {
         showsMyLocationButton={true}
         mapType={"hybrid"}
       >
-        <Marker
-          onPress={DisplayAnImage}
-          coordinate={{
-            latitude: 44.3148,
-            longitude: -84.6024,
-          }}
-        />
-
         {friendsImage
           ? friendsImage.map((friend) => (
               <Marker
+              image={friend.uri}
                 coordinate={{
                   latitude: friend.latitude,
-                  longitude: friend.longitude,
+                  longitude: friend.longitude, 
                 }}
                 title={friend.username}
                 description={friend.description}
               ></Marker>
             ))
           : null}
+
+
       </MapView>
 
       <View style={styles.buttonContainer}>
@@ -185,6 +222,12 @@ export default function App({ navigation }) {
           onPress={takePhoto}
           styles={[styles.button, styles.buttonOutline]}
         >
+          <TouchableOpacity
+            onPress={handlemarkers}
+            styles={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.button}>Refresh</Text>
+          </TouchableOpacity>
           <Text style={styles.button}>Take Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={signOut} styles={[styles.button]}>

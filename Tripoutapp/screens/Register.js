@@ -8,12 +8,14 @@ import 'firebase/firestore'
 import navigation from '../routes/navigation';
 import { NavigationEvents } from 'react-navigation';
 
+//Set variables to use in on state change (what user types in)
 function RegisterScreen ({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [displayName, setDisplayName] = useState('')
     const [f, setf] = useState([])
 
+    //Handles a new user creation and saves information to their instance in database. Upon completed registration, navigates user to the map 
     const handleSignUp = () =>{
         auth
         .createUserWithEmailAndPassword(email, password)
@@ -79,6 +81,8 @@ function RegisterScreen ({navigation}) {
             style={styles.input}
             secureTextEntry
             />
+            
+            
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                 onPress={handleSignUp}
