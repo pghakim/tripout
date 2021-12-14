@@ -64,6 +64,7 @@ export default function App({ navigation }) {
           setUserF(doc.data().friends);
           console.log(doc.data().friends);
           doc.data().friends.forEach((Element) => {
+            var i = 0;
             db.collection("Images")
               .doc(Element)
               .get()
@@ -71,12 +72,13 @@ export default function App({ navigation }) {
                 console.log(Element);
                 setCN(doc.data().uri.size);
                 setUserI(doc.data().uri);
+
                 setLatC(doc.data().Latitude);
                 setLongC(doc.data().Longitude);
-                console.log(userI);
-                console.log(doc.data().uri);
-                console.log(doc.data().Latitude);
-                console.log(doc.data().Longitude);
+                //console.log(userI);
+                //console.log(doc.data().uri);
+                //console.log(doc.data().Latitude);
+                //console.log(doc.data().Longitude);
               });
           });
         });
@@ -117,26 +119,32 @@ export default function App({ navigation }) {
     navigation.navigate("FriendL");
   };
   const handlemarkers = () => {
-    console.log(userI.length);
+    //console.log(userF.length);
+    //console.log(userI.length);
     db.collection("Friends")
       .doc(auth.currentUser.email)
       .get()
       .then((doc) => {
         setUserF(doc.data().friends);
-        console.log(doc.data().friends);
         doc.data().friends.forEach((Element) => {
           db.collection("Images")
             .doc(Element)
             .get()
             .then((doc) => {
+              setUserI(doc.data().uri)
+              console.log(userI.length);
+              for(let i = 0; i < userI.length; i++)
+              {
+                setUserI(doc.data.uri);
               friendsImage.push({
                 username: Element,
                 description: "Friend",
-                uri: doc.data().uri[0],
-                latitude: doc.data().Latitude[0],
-                longitude: doc.data().Longitude[0],
+                uri: doc.data().uri[i],
+                latitude: doc.data().Latitude[i],
+                longitude: doc.data().Longitude[i],
               });
-              /*console.log(Element);
+            }
+            /*console.log(Element);
             setCN(doc.data().uri.size);
             setUserI(doc.data().uri);
             setLatC(doc.data().Latitude);
@@ -146,10 +154,10 @@ export default function App({ navigation }) {
             console.log(doc.data().Latitude);
             console.log(doc.data().Longitude)*/
             });
-        });
+          })
       });
 
-    console.log(friendsImage);
+    //console.log(friendsImage);
   };
 
   const handlescreen3 = () => {
