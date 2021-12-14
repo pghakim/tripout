@@ -17,11 +17,6 @@ import firebase from "firebase";
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
 
-const w3wConvert = () => {
-  api
-    .convertTo3wa({ lat: 51.520847, lng: -0.195521 })
-    .then((data) => console.log(data));
-};
 
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
@@ -170,8 +165,8 @@ export default function App({ navigation }) {
     navigation.navigate("Inbox");
   };
 
-  const DisplayAnImage = (uri) => {
-    navigation.navigate("imageDisplay", { uriObj: uri });
+  const DisplayAnImage = (uri,latNum, longNum) => {
+    navigation.navigate("imageDisplay", { uriObj: uri, latObj: latNum, longObj: longNum });
   };
 
   return (
@@ -196,7 +191,7 @@ export default function App({ navigation }) {
         {friendsImage
           ? friendsImage.map((friend) => (
               <Marker
-                onPress={() => DisplayAnImage(friend.uri)}
+                onPress={() => DisplayAnImage(friend.uri,friend.latitude, friend.longitude)}
                 coordinate={{
                   latitude: friend.latitude,
                   longitude: friend.longitude,
