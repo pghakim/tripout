@@ -53,7 +53,8 @@ function RegisterScreen ({navigation}) {
                 db.collection("Images").doc(user.email).set({
                  uri: f,   
                  Latitude: f,
-                 Longitude: f
+                 Longitude: f,
+                 num: 0
                 })
                 
             navigation.replace("Map")

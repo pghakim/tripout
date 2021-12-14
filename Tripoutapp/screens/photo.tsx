@@ -84,6 +84,7 @@ export default function App({ navigation }) {
         uri: firebase.firestore.FieldValue.arrayUnion(image),
         Latitude: firebase.firestore.FieldValue.arrayUnion(latc),
         Longitude: firebase.firestore.FieldValue.arrayUnion(longc),
+        num: firebase.firestore.FieldValue.increment(1)
       });
     let blob;
     try {

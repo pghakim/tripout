@@ -39,7 +39,7 @@ export default function App({ navigation }) {
   //contains the longtitude of each image the user friends took
   const [longc, setLongC] = useState([]);
 
-  const [cN, setCN] = useState(0);
+  const [cN] = useState([]);
   const [friendsImage] = useState([]);
 
   const signOut = () => {
@@ -70,9 +70,11 @@ export default function App({ navigation }) {
               .get()
               .then((doc) => {
                 console.log(Element);
-                setCN(doc.data().uri.size);
+                console.log(doc.data().num)
+                cN.push({
+                  counter: doc.data().num
+                });
                 setUserI(doc.data().uri);
-
                 setLatC(doc.data().Latitude);
                 setLongC(doc.data().Longitude);
                 //console.log(userI);
@@ -119,21 +121,19 @@ export default function App({ navigation }) {
     navigation.navigate("FriendL");
   };
   const handlemarkers = () => {
-    //console.log(userF.length);
-    //console.log(userI.length);
+    console.log(cN)
     db.collection("Friends")
       .doc(auth.currentUser.email)
       .get()
       .then((doc) => {
-        setUserF(doc.data().friends);
+        //setUserF(doc.data().friends);
         doc.data().friends.forEach((Element) => {
           db.collection("Images")
             .doc(Element)
             .get()
             .then((doc) => {
               setUserI(doc.data().uri)
-              console.log(userI.length);
-              for(let i = 0; i < userI.length; i++)
+              for(let i = 0; i < doc.data().num; i++)
               {
                 setUserI(doc.data.uri);
               friendsImage.push({
