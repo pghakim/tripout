@@ -17,7 +17,6 @@ import firebase from "firebase";
 const api = require("@what3words/api/es2015");
 api.setOptions({ key: "4583TEMW" });
 
-
 export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -65,9 +64,9 @@ export default function App({ navigation }) {
               .get()
               .then((doc) => {
                 console.log(Element);
-                console.log(doc.data().num)
+                console.log(doc.data().num);
                 cN.push({
-                  counter: doc.data().num
+                  counter: doc.data().num,
                 });
                 setUserI(doc.data().uri);
                 setLatC(doc.data().Latitude);
@@ -116,7 +115,7 @@ export default function App({ navigation }) {
     navigation.navigate("FriendL");
   };
   const handlemarkers = () => {
-    console.log(cN)
+    console.log(cN);
     db.collection("Friends")
       .doc(auth.currentUser.email)
       .get()
@@ -127,19 +126,18 @@ export default function App({ navigation }) {
             .doc(Element)
             .get()
             .then((doc) => {
-              setUserI(doc.data().uri)
-              for(let i = 0; i < doc.data().num; i++)
-              {
+              setUserI(doc.data().uri);
+              for (let i = 0; i < doc.data().num; i++) {
                 setUserI(doc.data.uri);
-              friendsImage.push({
-                username: Element,
-                description: "Friend",
-                uri: doc.data().uri[i],
-                latitude: doc.data().Latitude[i],
-                longitude: doc.data().Longitude[i],
-              });
-            }
-            /*console.log(Element);
+                friendsImage.push({
+                  username: Element,
+                  description: "Friend",
+                  uri: doc.data().uri[i],
+                  latitude: doc.data().Latitude[i],
+                  longitude: doc.data().Longitude[i],
+                });
+              }
+              /*console.log(Element);
             setCN(doc.data().uri.size);
             setUserI(doc.data().uri);
             setLatC(doc.data().Latitude);
@@ -149,7 +147,7 @@ export default function App({ navigation }) {
             console.log(doc.data().Latitude);
             console.log(doc.data().Longitude)*/
             });
-          })
+        });
       });
 
     //console.log(friendsImage);
@@ -165,8 +163,12 @@ export default function App({ navigation }) {
     navigation.navigate("Inbox");
   };
 
-  const DisplayAnImage = (uri,latNum, longNum) => {
-    navigation.navigate("imageDisplay", { uriObj: uri, latObj: latNum, longObj: longNum });
+  const DisplayAnImage = (uri, latNum, longNum) => {
+    navigation.navigate("imageDisplay", {
+      uriObj: uri,
+      latObj: latNum,
+      longObj: longNum,
+    });
   };
 
   return (
@@ -191,7 +193,9 @@ export default function App({ navigation }) {
         {friendsImage
           ? friendsImage.map((friend) => (
               <Marker
-                onPress={() => DisplayAnImage(friend.uri,friend.latitude, friend.longitude)}
+                onPress={() =>
+                  DisplayAnImage(friend.uri, friend.latitude, friend.longitude)
+                }
                 coordinate={{
                   latitude: friend.latitude,
                   longitude: friend.longitude,
@@ -205,19 +209,19 @@ export default function App({ navigation }) {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handlescreen4} styles={styles.button}>
-          <Text style={styles.button}>inbox</Text>
+          <Text style={styles.button}>Accept Friends</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handlescreen3}
           styles={[styles.button, styles.buttonOutline]}
         >
-          <Text style={styles.button}>Friends request</Text>
+          <Text style={styles.button}>Add Friends</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handlescreen}
           styles={[styles.button, styles.buttonOutline]}
         >
-          <Text style={styles.button}>FriendList</Text>
+          <Text style={styles.button}>Friend List</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={takePhoto}
@@ -232,7 +236,7 @@ export default function App({ navigation }) {
           <Text style={styles.button}>Take Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={signOut} styles={[styles.button]}>
-          <Text styles={styles.buttonText}>Signout</Text>
+          <Text styles={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -260,9 +264,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#339cd4",
-    width: "100%",
-    padding: 10,
-    borderRadius: 10,
+    width: 120,
+    padding: 7,
+    borderRadius: 11,
     alignItems: "flex-start",
   },
   buttonText: {
