@@ -40,7 +40,7 @@ export default function App({ navigation }) {
   const [longc, setLongC] = useState([]);
 
   const [cN, setCN] = useState(0);
-  const [friendsImage] = useState([ ]);
+  const [friendsImage] = useState([]);
 
   const signOut = () => {
     firebase
@@ -119,24 +119,24 @@ export default function App({ navigation }) {
   const handlemarkers = () => {
     console.log(userI.length);
     db.collection("Friends")
-    .doc(auth.currentUser.email)
-    .get()
-    .then((doc) => {
-      setUserF(doc.data().friends);
-      console.log(doc.data().friends);
-      doc.data().friends.forEach((Element) => {
-        db.collection("Images")
-          .doc(Element)
-          .get()
-          .then((doc) => {
-            friendsImage.push({
-              username: Element,
-              description: "Friend",
-              uri: doc.data().uri[0],
-              latitude: doc.data().Latitude[0],
-              longitude: doc.data().Longitude[0],
-            })
-            /*console.log(Element);
+      .doc(auth.currentUser.email)
+      .get()
+      .then((doc) => {
+        setUserF(doc.data().friends);
+        console.log(doc.data().friends);
+        doc.data().friends.forEach((Element) => {
+          db.collection("Images")
+            .doc(Element)
+            .get()
+            .then((doc) => {
+              friendsImage.push({
+                username: Element,
+                description: "Friend",
+                uri: doc.data().uri[0],
+                latitude: doc.data().Latitude[0],
+                longitude: doc.data().Longitude[0],
+              });
+              /*console.log(Element);
             setCN(doc.data().uri.size);
             setUserI(doc.data().uri);
             setLatC(doc.data().Latitude);
@@ -145,11 +145,9 @@ export default function App({ navigation }) {
             console.log(doc.data().uri);
             console.log(doc.data().Latitude);
             console.log(doc.data().Longitude)*/
-          });
+            });
+        });
       });
-    });
-
-    
 
     console.log(friendsImage);
   };
@@ -164,7 +162,9 @@ export default function App({ navigation }) {
     navigation.navigate("Inbox");
   };
 
-  const DisplayAnImage = () => {};
+  const DisplayAnImage = (uri) => {
+    navigation.navigate("imageDisplay", { uriObj: uri });
+  };
 
   return (
     <View style={styles.container}>
@@ -188,18 +188,16 @@ export default function App({ navigation }) {
         {friendsImage
           ? friendsImage.map((friend) => (
               <Marker
-              image={friend.uri}
+                onPress={() => DisplayAnImage(friend.uri)}
                 coordinate={{
                   latitude: friend.latitude,
-                  longitude: friend.longitude, 
+                  longitude: friend.longitude,
                 }}
                 title={friend.username}
                 description={friend.description}
               ></Marker>
             ))
           : null}
-
-
       </MapView>
 
       <View style={styles.buttonContainer}>

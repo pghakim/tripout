@@ -8,6 +8,7 @@ import Messages from "../screens/Messages";
 import PhotoDisplay from "../screens/photo";
 import forgotPassword from "../screens/forgotPassword";
 import Register from "../screens/Register";
+import imageDisplay from "../screens/imageDisplay";
 const screens = {
   Home: {
     screen: Home,
@@ -37,13 +38,19 @@ const screens = {
     screen: Messages,
   },
   ForgotPassword: {
-    screen: forgotPassword
+    screen: forgotPassword,
   },
   Register: {
-    screen: Register
+    screen: Register,
   },
   cameraScreen: {
     screen: PhotoDisplay,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  imageDisplay: {
+    screen: imageDisplay,
     navigationOptions: {
       headerShown: false,
     },
